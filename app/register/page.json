@@ -1,0 +1,17 @@
+{
+    "label": "Login!",
+    "field": {
+        "fullNameField": {
+            "label": "Full Name"
+        },
+        "emailField": {
+            "label": "Email"
+        },
+        "passwordField": {
+            "label": "Password"
+        },
+        "loginButton": {
+            "label": "REgister"
+        }
+    }
+}

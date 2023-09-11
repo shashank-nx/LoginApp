@@ -1,0 +1,14 @@
+{
+    "label": "Login!",
+    "field": {
+        "emailField": {
+            "label": "Email"
+        },
+        "passwordField": {
+            "label": "Password"
+        },
+        "loginButton": {
+            "label": "LOGIN"
+        }
+    }
+}
