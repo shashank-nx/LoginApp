@@ -1,5 +1,5 @@
 {
-    "label": "Login!",
+    "label": "Register!",
     "field": {
         "fullNameField": {
             "label": "Full Name"
@@ -8,10 +8,11 @@
             "label": "Email"
         },
         "passwordField": {
-            "label": "Password"
+            "label": "Password",
+            "type": "password"
         },
         "loginButton": {
-            "label": "REgister"
+            "label": "Register"
         }
     }
 }

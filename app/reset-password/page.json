@@ -1,0 +1,14 @@
+{
+    "label": "Reset Password!",
+    "field": {
+        "newPasswordField": {
+            "label": "New Password"
+        },
+        "conformPasswordField": {
+            "label": "Conform Password"
+        },
+        "resetPasswordButton": {
+            "label": "Reset Password"
+        }
+    }
+}
