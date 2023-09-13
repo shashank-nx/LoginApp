@@ -1,0 +1,11 @@
+{
+    "label": "Forgot Password!",
+    "field": {
+        "emailField": {
+            "label": "Email"
+        },
+        "forgotPasswordButton": {
+            "label": "Forgot Password"
+        }
+    }
+}

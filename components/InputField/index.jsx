@@ -1,8 +1,8 @@
 import { TextField, Button } from "@mui/material";
 
 export const InputTextField = (props) => {
-    const { size = "small", variant = "outlined", style, label, value, onChange } = props
-    return <TextField size={size} variant={variant} label={label} sx={style} value={value} onChange={onChange}/>
+    const { size = "small", variant = "outlined", style, value, onChange, ...rest } = props
+    return <TextField size={size} variant={variant} sx={style} value={value} onChange={onChange} {...rest}/>
 }
 
 export const ButtonField = (props) => {

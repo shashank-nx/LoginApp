@@ -22,7 +22,7 @@ const axiosRequest = async (props) => {
         const res = await axios({
             url, method, headers, data
         });
-        return { data: res.data, status: "Success" };
+        return { data: res.data, status: res.status };
     } catch (err) {
         return { data: err.message, status: err.code };
     }

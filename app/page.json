@@ -5,7 +5,8 @@
             "label": "Email"
         },
         "passwordField": {
-            "label": "Password"
+            "label": "Password",
+            "type": "password"
         },
         "loginButton": {
             "label": "LOGIN"
