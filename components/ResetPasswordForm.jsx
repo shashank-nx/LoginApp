@@ -24,9 +24,9 @@ export default function ResetPassword(props) {
 
     const onSumbit = async () => {
         if (enableLogin) {
-            const { status } = await ResetPasswordAction({ password: newPassword });
-            if(status === 200){
-                router.push('/');
+            const { status } = await axios.post("/api/auth/resetPassword", { password: newPassword });
+            if (status === 200) {
+                router.push('/user/login');
             }
         }
     }
@@ -46,8 +46,8 @@ export default function ResetPassword(props) {
     }, [newPassword]);
 
     return (
-        <div id="login-form">
-            <h3 id="login-header">{label}</h3>
+        <div className="div-conatiner">
+            <h3 className="div-label">{label}</h3>
             <InputTextField value={newPassword} onChange={({ target }) => handleNewPassword(target.value)} {...newPasswordField} />
             <InputTextField error={conformPassword.isError} value={conformPassword.value} onChange={({ target }) => handleConformPassword(target.value)} {...conformPasswordField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...resetPasswordButton} />

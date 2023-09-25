@@ -15,7 +15,7 @@ export default function ResetPassword(props) {
     const [enableLogin, setEnableLogin] = useState(false);
 
     useEffect(() => {
-        if (!email.isError  && email.value) {
+        if (!email.isError && email.value) {
             setEnableLogin(true);
         } else {
             setEnableLogin(false);
@@ -24,10 +24,9 @@ export default function ResetPassword(props) {
 
     const onSumbit = async () => {
         if (enableLogin) {
-            const { status } = await ForgotPasswordAction({ email: email.value });
-            console.log("status=========", status);
-            if(status === 200){
-                router.push('/');
+            const { status } = await axios.post("/api/auth/forgetPassword", { email: email.value });
+            if (status === 200) {
+                router.push('/user/login');
             }
         }
     }
@@ -36,12 +35,12 @@ export default function ResetPassword(props) {
 
     const handleEmailName = useCallback((value) => {
         const isValid = EmailValidator(value);
-        setEmail({ value , isError: !isValid});
+        setEmail({ value, isError: !isValid });
     }, []);
 
     return (
-        <div id="login-form">
-            <h3 id="login-header">{label}</h3>
+        <div className="div-conatiner">
+            <h3 className="div-label">{label}</h3>
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...forgotPasswordButton} />
         </div>

@@ -17,10 +17,6 @@ export default function RegisterForm(props) {
     const [enableLogin, setEnableLogin] = useState(false);
 
     useEffect(() => {
-        localStorage.setItem('authType', "jwt");
-    }, [])
-
-    useEffect(() => {
         if (!email.isError && email.value.length >=5 && fullName.length >= 1 && password.length >= 1) {
             setEnableLogin(true);
         } else {
@@ -30,9 +26,9 @@ export default function RegisterForm(props) {
 
     const onSumbit = async () => {
         if (enableLogin) {
-            const { status } = await SignupAction({ fullName, email: email.value, password });
+            const { status } = await axios.post("/api/auth/register", { fullName, email: email.value, password });
             if(status === 200){
-                router.push('/home');
+                router.push('/');
             }
         }
     }
@@ -54,13 +50,13 @@ export default function RegisterForm(props) {
 
 
     return (
-        <div id="login-form">
-            <h3 id="login-header">{label}</h3>
+        <div className="div-conatiner">
+            <h3 className="div-label">{label}</h3>
             <InputTextField value={fullName} onChange={({ target }) => handleFullName(target.value)} {...fullNameField} />
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
             <InputTextField value={password} onChange={({ target }) => handlePassword(target.value)} {...passwordField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...loginButton} />
-            <Link id="register-link" href={'/'}>
+            <Link id="register-link" href={'/user/login'}>
                 Already have an account?
                 <span className="underline">Login</span>
             </Link>

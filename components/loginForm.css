@@ -1,4 +1,4 @@
-#login-form {
+.div-conatiner {
     display: grid;
     margin-inline: 42%;
     margin-block: 13%;
@@ -9,7 +9,7 @@
     border-radius: 5px;
 }
 
-#login-form>* {
+.div-conatiner>* {
     margin-block: 10px;
 }
 
