@@ -7,6 +7,6 @@ export const InputTextField = (props) => {
 }
 
 export const ButtonField = (props) => {
-    const { variant = "outlined", style, label, enabled, onSumbit } = props;
+    const { variant = "outlined", style, label, enabled=true, onSumbit } = props;
     return <Button variant={variant} sx={style} onClick={onSumbit} disabled={!enabled}>{label}</Button>
 }

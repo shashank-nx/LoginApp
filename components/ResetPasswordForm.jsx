@@ -1,11 +1,9 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import './loginForm.css';
 import { InputTextField, ButtonField } from "@/components/InputField";
-import { ResetPasswordAction } from './loginRegisterAction';
+import Container from './library/Container';
 
 export default function ResetPassword(props) {
 
@@ -46,11 +44,11 @@ export default function ResetPassword(props) {
     }, [newPassword]);
 
     return (
-        <div className="div-conatiner">
+        <Container>
             <h3 className="div-label">{label}</h3>
             <InputTextField value={newPassword} onChange={({ target }) => handleNewPassword(target.value)} {...newPasswordField} />
             <InputTextField error={conformPassword.isError} value={conformPassword.value} onChange={({ target }) => handleConformPassword(target.value)} {...conformPasswordField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...resetPasswordButton} />
-        </div>
+        </Container>
     );
 }

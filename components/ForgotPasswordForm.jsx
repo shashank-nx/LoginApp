@@ -1,14 +1,12 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import './loginForm.css';
 import { InputTextField, ButtonField } from "@/components/InputField";
-import { ForgotPasswordAction } from './loginRegisterAction';
 import { EmailValidator } from "./Validator";
+import Container from './library/Container';
 
-export default function ResetPassword(props) {
+export default function ForgotPassword(props) {
 
     const router = useRouter();
     const [email, setEmail] = useState({ value: null, isError: false });
@@ -28,9 +26,10 @@ export default function ResetPassword(props) {
             if (status === 200) {
                 router.push('/user/login');
             }
+            window.handleForgotPassword();
         }
     }
-
+    
     const { label, field: { emailField, forgotPasswordButton } } = props;
 
     const handleEmailName = useCallback((value) => {
@@ -39,10 +38,10 @@ export default function ResetPassword(props) {
     }, []);
 
     return (
-        <div className="div-conatiner">
+        <Container>
             <h3 className="div-label">{label}</h3>
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...forgotPasswordButton} />
-        </div>
+        </Container>
     );
 }

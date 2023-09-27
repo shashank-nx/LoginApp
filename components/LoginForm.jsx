@@ -1,14 +1,16 @@
 'use client';
-import Link from "next/link";
-import StyleHOC from "./muiStyle";
-import { InputTextField, ButtonField } from "@/components/InputField";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { EmailValidator as DefaultEmailValidator } from "./Validator";
+import Link from "next/link";
 import axios from "axios";
-import { withStyles } from "@mui/styles";
+import Grid from "@mui/material/Grid"
 
-const LoginForm = withStyles(StyleHOC) (props => {
+import { InputTextField, ButtonField } from "@/components/InputField";
+import { EmailValidator as DefaultEmailValidator } from "./Validator";
+import Container from './library/Container';
+import LinkContainer from './library/linkContainer';
+
+const LoginForm = (props) => {
 
     const { push } = useRouter();
     const { label, emailValidator, passwordValidator, field: { emailField, passwordField, loginButton } } = props;
@@ -45,20 +47,30 @@ const LoginForm = withStyles(StyleHOC) (props => {
     }, []);
 
     return (
-        <div className="container">
+        <Container>
             <h3 className="div-label">{label}</h3>
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
             <InputTextField error={password.isError} value={password.value} onChange={({ target }) => handlePassword(target.value)} {...passwordField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...loginButton} />
-            <Link id="forgotPassword-link" href={'/user/forgot-password'}>
-                Forgot Password?
-            </Link>
-            <Link id="register-link" href={'/user/register'}>
-                Don&apos;t have an account?
-                <span className="underline">Register</span>
-            </Link>
-        </div>
+            <Grid container spacing={2}>
+                <Grid item md={5}>
+                    <LinkContainer>
+                        <Link id="forgotPassword-link" href={'/user/forgot-password'}>
+                            Forgot Password?
+                        </Link>
+                    </LinkContainer>
+                </Grid>
+                <Grid item md={7}>
+                    <LinkContainer>
+                        <Link id="register-link" href={'/user/register'}>
+                            Don&apos;t have an account?
+                            <span className="underline">Register</span>
+                        </Link>
+                    </LinkContainer>
+                </Grid>
+            </Grid>
+        </Container>
     );
-})
+}
 
 export default LoginForm;

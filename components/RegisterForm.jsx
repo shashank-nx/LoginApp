@@ -1,12 +1,12 @@
 'use client';
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { InputTextField, ButtonField } from "@/components/InputField";
-import { useCallback, useEffect, useState } from "react";
-import { SignupAction } from "./loginRegisterAction";
 import { EmailValidator } from "./Validator";
-import { getRequest } from "@/components/httpRequest";
+import Container from './library/Container';
+import LinkContainer from './library/linkContainer';
 
 export default function RegisterForm(props) {
 
@@ -17,7 +17,7 @@ export default function RegisterForm(props) {
     const [enableLogin, setEnableLogin] = useState(false);
 
     useEffect(() => {
-        if (!email.isError && email.value.length >=5 && fullName.length >= 1 && password.length >= 1) {
+        if (!email.isError && email.value.length >= 5 && fullName.length >= 1 && password.length >= 1) {
             setEnableLogin(true);
         } else {
             setEnableLogin(false);
@@ -27,7 +27,7 @@ export default function RegisterForm(props) {
     const onSumbit = async () => {
         if (enableLogin) {
             const { status } = await axios.post("/api/auth/register", { fullName, email: email.value, password });
-            if(status === 200){
+            if (status === 200) {
                 router.push('/');
             }
         }
@@ -35,7 +35,7 @@ export default function RegisterForm(props) {
 
     const handleEmailName = useCallback((value) => {
         const isValid = EmailValidator(value);
-        setEmail({ value , isError: !isValid});
+        setEmail({ value, isError: !isValid });
     }, []);
 
     const handlePassword = useCallback((value) => {
@@ -46,20 +46,22 @@ export default function RegisterForm(props) {
         setFullName(value)
     }, []);
 
-    const { label, field : { fullNameField, emailField, passwordField, loginButton}} = props;
+    const { label, field: { fullNameField, emailField, passwordField, loginButton } } = props;
 
 
     return (
-        <div className="div-conatiner">
+        <Container>
             <h3 className="div-label">{label}</h3>
             <InputTextField value={fullName} onChange={({ target }) => handleFullName(target.value)} {...fullNameField} />
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
             <InputTextField value={password} onChange={({ target }) => handlePassword(target.value)} {...passwordField} />
             <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...loginButton} />
-            <Link id="register-link" href={'/user/login'}>
-                Already have an account?
-                <span className="underline">Login</span>
-            </Link>
-        </div>
+            <LinkContainer>
+                <Link id="register-link" href={'/user/login'}>
+                    Already have an account?
+                    <span className="underline">Login</span>
+                </Link>
+            </LinkContainer>
+        </Container>
     );
 }
