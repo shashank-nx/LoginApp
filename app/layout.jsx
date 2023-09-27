@@ -1,14 +1,33 @@
 "use client";
 
 import './globals.css'
-import { Inter } from 'next/font/google'
 import successiveLogo from '../public/successive-logo.svg';
 import HeaderComponent from '../components/Header';
-import axios, { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useEffect, useReducer, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
-const inter = Inter({ subsets: ['latin'] })
+const initialLoginState = {
+    "isSuccess": false,
+    "isLogin": false
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case "verified":
+            return {
+                "isSuccess": true,
+                "isLogin": true
+            }
+        case "unVerified":
+            return {
+                "isSuccess": true,
+                "isLogin": false
+            }
+        default:
+            return state;
+    }
+};
 
 export default function RootLayout({
     children,
@@ -16,46 +35,37 @@ export default function RootLayout({
 
     const { push } = useRouter();
     const pathname = usePathname();
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
+    const [loginState, dispatch] = useReducer(reducer, initialLoginState);
 
-    useEffect(() => {
-        (async () => {
-            await handleUser();
-        })();
-    }, []);
+    const handleUser = useCallback(async () => {
+        const { error } = await getUser();
 
-    useEffect(() => {
-        (async () => {
-            await handleUser();
-        })();
-    }, [pathname]);
-
-    const handleUser = async () => {
-        const { user, error } = await getUser();
-
-        if (pathname.includes('/user') && !error) {
-            push("/");
-            setIsLogin(true)
-        } else if (error) {
+        if (error && !pathname.includes('/user')) {
             push("/user/login");
-            setIsLogin(false)
-        } else {
-            setIsLogin(true)
+            return;
+        } else if (pathname.includes('/user') && !error) {
+            push("/");
+            return;
         }
 
-        // if the error did not happen, if everything is alright
-        setIsSuccess(true);
-    }
+        return dispatch({ type: "verified" });
+        
+    }, [pathname, push])
+
+    useEffect(() => {
+        (async () => {
+            await handleUser();
+        })();
+    }, [handleUser, pathname]);
 
     return (
         <html lang="en">
-            <body className={inter.className}>
-                <HeaderComponent logo={successiveLogo} isLogin={isLogin} />
+            <body>
+                <HeaderComponent logo={successiveLogo} isLogin={loginState.isLogin} />
                 <div id='componentBody'>
-                    {isSuccess ?
-                        children :
-                        <div>Loaging............</div>
+                    {!loginState.isSuccess ?
+                        <div>Loading............</div> :
+                        children
                     }
                 </div>
             </body>

@@ -26,7 +26,7 @@ export async function POST(request) {
 
     const { data, status } = await SignupAction({ headers: { "Set-Cookie": seralized }});
     if (status === 200) {
-        return new Response("Login!!!", {
+        return new Response("Register User!!!", {
             status: 200,
             headers: { "Set-Cookie": seralized },
         });

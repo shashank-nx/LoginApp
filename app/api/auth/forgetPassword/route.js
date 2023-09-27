@@ -26,7 +26,7 @@ export async function POST(request) {
 
     const { data, status } = await ForgotPasswordAction({ headers: { "Set-Cookie": seralized } });
     if (status === 200) {
-        return new Response("Login!!!", {
+        return new Response("Sent reset Password Email link!!!", {
             status: 200,
         });
     } else {

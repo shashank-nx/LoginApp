@@ -3,44 +3,44 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const cookieStore = cookies();
+    const cookieStore = cookies();
 
-  const token = cookieStore.get('auth');
+    const token = cookieStore.get('auth');
 
-  if (!token) {
-    return NextResponse.json(
-      {
-        message: "Unauthorized",
-      },
-      {
-        status: 401,
-      }
-    );
-  }
+    if (!token) {
+        return NextResponse.json(
+            {
+                message: "Unauthorized",
+            },
+            {
+                status: 401,
+            }
+        );
+    }
 
-  const { value } = token;
+    const { value } = token;
 
-  // Always check this
-  const secret = process.env.PRIVATE_KEY || "";
+    // Always check this
+    const secret = process.env.PRIVATE_KEY || "";
 
-  try {
-    // verify(value, secret);
+    try {
+        verify(value, secret);
 
-    const response = {
-      user: "User Login!!!",
-    };
+        const response = {
+            user: "User Login!!!",
+        };
 
-    return new Response(JSON.stringify(response), {
-      status: 200,
-    });
-  } catch (e) {
-    return NextResponse.json(
-      {
-        message: "Something went wrong",
-      },
-      {
-        status: 400,
-      }
-    );
-  }
+        return new Response(JSON.stringify(response), {
+            status: 200,
+        });
+    } catch (e) {
+        return NextResponse.json(
+            {
+                message: "Something went wrong",
+            },
+            {
+                status: 400,
+            }
+        );
+    }
 }

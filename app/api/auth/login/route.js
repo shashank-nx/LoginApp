@@ -27,7 +27,8 @@ export async function POST(request) {
     const { data, status } = await LoginAction({ headers: { "Set-Cookie": seralized } });
     if (status === 200) {
         return new Response("Login!!!", {
-            status: 200,
+            data,
+            status,
             headers: { "Set-Cookie": seralized },
         });
     } else {

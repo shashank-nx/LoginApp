@@ -1,14 +1,3 @@
-.div-conatiner {
-    display: grid;
-    margin-inline: 42%;
-    margin-block: 13%;
-    background-color: white;
-    width: 280px;
-    padding: 20px;
-    padding-inline: 30px;
-    border-radius: 5px;
-}
-
 .div-conatiner>* {
     margin-block: 10px;
 }
