@@ -1,31 +1,25 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-
 import { InputTextField, ButtonField } from "@/components/InputField";
 import Container from './library/Container';
 
 export default function ResetPassword(props) {
 
-    const router = useRouter();
     const [newPassword, setNewPassword] = useState(null);
     const [conformPassword, setConformPassword] = useState({ value: null, isError: false });
-    const [enableLogin, setEnableLogin] = useState(false);
+    const [enableButton, setEnableButton] = useState(false);
 
     useEffect(() => {
         if (newPassword && conformPassword && !conformPassword.isError) {
-            setEnableLogin(true);
+            setEnableButton(true);
         } else {
-            setEnableLogin(false);
+            setEnableButton(false);
         }
     }, [newPassword, conformPassword])
 
     const onSumbit = async () => {
-        if (enableLogin) {
-            const { status } = await axios.post("/api/auth/resetPassword", { password: newPassword });
-            if (status === 200) {
-                router.push('/user/login');
-            }
+        if (enableButton) {
+            window.handleResetPassword({ password: newPassword, isValid: enableButton });
         }
     }
 
@@ -48,7 +42,7 @@ export default function ResetPassword(props) {
             <h3 className="div-label">{label}</h3>
             <InputTextField value={newPassword} onChange={({ target }) => handleNewPassword(target.value)} {...newPasswordField} />
             <InputTextField error={conformPassword.isError} value={conformPassword.value} onChange={({ target }) => handleConformPassword(target.value)} {...conformPasswordField} />
-            <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...resetPasswordButton} />
+            <ButtonField onSumbit={onSumbit} enabled={enableButton} {...resetPasswordButton} />
         </Container>
     );
 }

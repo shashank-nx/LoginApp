@@ -1,11 +1,12 @@
 "use client";
 
-import './globals.css'
-import successiveLogo from '../public/successive-logo.svg';
-import HeaderComponent from '../components/Header';
-import axios from 'axios';
 import { useEffect, useReducer, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import axios from 'axios';
+import successiveLogo from '../public/successive-logo.svg';
+import HeaderComponent from '../components/Header';
+import Loader from "../components/Loader";
+import './globals.css'
 
 const initialLoginState = {
     "isSuccess": false,
@@ -48,6 +49,10 @@ export default function RootLayout({
             return;
         }
 
+        if(error){
+            return dispatch({ type: "unVerified" });
+        }
+
         return dispatch({ type: "verified" });
         
     }, [pathname, push])
@@ -64,7 +69,7 @@ export default function RootLayout({
                 <HeaderComponent logo={successiveLogo} isLogin={loginState.isLogin} />
                 <div id='componentBody'>
                     {!loginState.isSuccess ?
-                        <div>Loading............</div> :
+                        <Loader /> :
                         children
                     }
                 </div>
