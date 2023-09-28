@@ -1,33 +1,25 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
-import './loginForm.css';
 import { InputTextField, ButtonField } from "@/components/InputField";
-import { ResetPasswordAction } from './loginRegisterAction';
+import Container from './library/Container';
 
 export default function ResetPassword(props) {
 
-    const router = useRouter();
     const [newPassword, setNewPassword] = useState(null);
     const [conformPassword, setConformPassword] = useState({ value: null, isError: false });
-    const [enableLogin, setEnableLogin] = useState(false);
+    const [enableButton, setEnableButton] = useState(false);
 
     useEffect(() => {
         if (newPassword && conformPassword && !conformPassword.isError) {
-            setEnableLogin(true);
+            setEnableButton(true);
         } else {
-            setEnableLogin(false);
+            setEnableButton(false);
         }
     }, [newPassword, conformPassword])
 
     const onSumbit = async () => {
-        if (enableLogin) {
-            const { status } = await ResetPasswordAction({ password: newPassword });
-            if(status === 200){
-                router.push('/');
-            }
+        if (enableButton) {
+            window.handleResetPassword({ password: newPassword, isValid: enableButton });
         }
     }
 
@@ -46,11 +38,11 @@ export default function ResetPassword(props) {
     }, [newPassword]);
 
     return (
-        <div id="login-form">
-            <h3 id="login-header">{label}</h3>
+        <Container>
+            <h3 className="div-label">{label}</h3>
             <InputTextField value={newPassword} onChange={({ target }) => handleNewPassword(target.value)} {...newPasswordField} />
             <InputTextField error={conformPassword.isError} value={conformPassword.value} onChange={({ target }) => handleConformPassword(target.value)} {...conformPasswordField} />
-            <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...resetPasswordButton} />
-        </div>
+            <ButtonField onSumbit={onSumbit} enabled={enableButton} {...resetPasswordButton} />
+        </Container>
     );
 }

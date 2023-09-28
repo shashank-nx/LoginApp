@@ -1,8 +1,7 @@
-import LoginForm from "@/components/LoginForm";
-import page from "./page.json";
+"use client";
 
-export default function Page() {
-  return <main>
-    <LoginForm {...page}/>
-  </main>
+export default function Home() {
+    return <main>
+        <div>Home</div>
+    </main>
 }

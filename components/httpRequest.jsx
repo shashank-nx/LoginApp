@@ -1,12 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "https://mockapi.free.beeceptor.com";
-
 const getHeader = (urlHeader = {}, setHeader = true) => {
-    const access_token = localStorage.getItem('access_token');
-    const authType = localStorage.getItem('authType');
     const header = { ...urlHeader, authType };
-    if (setHeader) {
+    if (urlHeader) {
         header.authorization = access_token;
     }
     return header;
@@ -14,7 +10,7 @@ const getHeader = (urlHeader = {}, setHeader = true) => {
 
 const axiosRequest = async (props) => {
     const { componentUrl, method, headers, data, params } = props;
-    let url = BASE_URL + componentUrl;
+    let url = process.env.REQUEST_URL + componentUrl;
     if (params) {
         url += '?' + new URLSearchParams(params).toString();
     }
@@ -29,7 +25,6 @@ const axiosRequest = async (props) => {
 }
 
 export const getRequest = (props) => {
-    const { urlHeader, componentUrl, setHeader, params } = props;
-    const headers = getHeader(urlHeader, setHeader);
+    const { headers, componentUrl, params } = props;
     return axiosRequest({ componentUrl, method: 'GET', headers, params });
 }

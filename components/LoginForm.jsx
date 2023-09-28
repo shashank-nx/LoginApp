@@ -1,64 +1,69 @@
 'use client';
-import Link from "next/link";
-import './loginForm.css';
-import { InputTextField, ButtonField } from "@/components/InputField";
 import { useCallback, useEffect, useState } from "react";
-import { LoginAction } from './loginRegisterAction';
-import { EmailValidator } from "./Validator";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Grid from "@mui/material/Grid"
 
-export default function LoginForm(props) {
+import { InputTextField, ButtonField } from "@/components/InputField";
+import { EmailValidator as DefaultEmailValidator } from "./Validator";
+import Container from './library/Container';
+import LinkContainer from './library/linkContainer';
 
-    const router = useRouter();
+const LoginForm = (props) => {
+
+    const { label, emailValidator, passwordValidator, field: { emailField, passwordField, loginButton } } = props;
     const [email, setEmail] = useState({ value: null, isError: false });
-    const [password, setPassword] = useState(null);
-    const [enableLogin, setEnableLogin] = useState(false);
+    const [password, setPassword] = useState({ value: null, isError: false });
+    const [enableButton, setEnableButton] = useState(false);
 
     useEffect(() => {
-        localStorage.setItem('authType', "jwt");
-    }, [])
-
-    useEffect(() => {
-        if (!email.isError && password && password.length >= 1) {
-            setEnableLogin(true);
+        if (!email.isError && !email.isError) {
+            setEnableButton(true);
         } else {
-            setEnableLogin(false);
+            setEnableButton(false);
         }
     }, [email, password])
 
     const onSumbit = async () => {
-        if (enableLogin) {
-            const { data, status } = await LoginAction({ email: email.value, password });
-            if(status === 200){
-                router.push('/home');
-            }
+        if (enableButton) {
+            window.handleLogin({ email: email.value, password, isValid: enableButton });
         }
     }
 
-    const { label, field: { emailField, passwordField, loginButton } } = props;
-
     const handleEmailName = useCallback((value) => {
-        const isValid = EmailValidator(value);
+        const isValid = emailValidator ? emailValidator(value) : DefaultEmailValidator(value);
         setEmail({ value, isError: !isValid });
     }, []);
 
     const handlePassword = useCallback((value) => {
-        setPassword(value)
+        const isValid = passwordValidator ? passwordValidator(value) : true;
+        setPassword({ value, isError: !isValid })
     }, []);
 
     return (
-        <div id="login-form">
-            <h3 id="login-header">{label}</h3>
+        <Container>
+            <h3 className="div-label">{label}</h3>
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
-            <InputTextField value={password} onChange={({ target }) => handlePassword(target.value)} {...passwordField} />
-            <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...loginButton} />
-            <Link id="forgotPassword-link" href={'/forgot-password'}>
-                Forgot Password?
-            </Link>
-            <Link id="register-link" href={'/register'}>
-                Don&apos;t have an account?
-                <span className="underline">Register</span>
-            </Link>
-        </div>
+            <InputTextField error={password.isError} value={password.value} onChange={({ target }) => handlePassword(target.value)} {...passwordField} />
+            <ButtonField onSumbit={onSumbit} enabled={enableButton} {...loginButton} />
+            <Grid container spacing={2}>
+                <Grid item md={5}>
+                    <LinkContainer>
+                        <Link id="forgotPassword-link" href={'/user/forgot-password'}>
+                            Forgot Password?
+                        </Link>
+                    </LinkContainer>
+                </Grid>
+                <Grid item md={7}>
+                    <LinkContainer>
+                        <Link id="register-link" href={'/user/register'}>
+                            Don&apos;t have an account?
+                            <span className="underline">Register</span>
+                        </Link>
+                    </LinkContainer>
+                </Grid>
+            </Grid>
+        </Container>
     );
 }
+
+export default LoginForm;

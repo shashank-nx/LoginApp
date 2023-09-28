@@ -1,49 +1,40 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
-import './loginForm.css';
 import { InputTextField, ButtonField } from "@/components/InputField";
-import { ForgotPasswordAction } from './loginRegisterAction';
 import { EmailValidator } from "./Validator";
+import Container from './library/Container';
 
-export default function ResetPassword(props) {
+export default function ForgotPassword(props) {
 
-    const router = useRouter();
     const [email, setEmail] = useState({ value: null, isError: false });
-    const [enableLogin, setEnableLogin] = useState(false);
+    const [enableButton, setEnableButton] = useState(false);
 
     useEffect(() => {
-        if (!email.isError  && email.value) {
-            setEnableLogin(true);
+        if (!email.isError && email.value) {
+            setEnableButton(true);
         } else {
-            setEnableLogin(false);
+            setEnableButton(false);
         }
     }, [email])
 
     const onSumbit = async () => {
-        if (enableLogin) {
-            const { status } = await ForgotPasswordAction({ email: email.value });
-            console.log("status=========", status);
-            if(status === 200){
-                router.push('/');
-            }
+        if (enableButton) {
+            window.handleForgotPassword({ email: email.value, isValid: enableButton });
         }
     }
-
+    
     const { label, field: { emailField, forgotPasswordButton } } = props;
 
     const handleEmailName = useCallback((value) => {
         const isValid = EmailValidator(value);
-        setEmail({ value , isError: !isValid});
+        setEmail({ value, isError: !isValid });
     }, []);
 
     return (
-        <div id="login-form">
-            <h3 id="login-header">{label}</h3>
+        <Container>
+            <h3 className="div-label">{label}</h3>
             <InputTextField error={email.isError} value={email.value} onChange={({ target }) => handleEmailName(target.value)} {...emailField} />
-            <ButtonField onSumbit={onSumbit} enabled={enableLogin} {...forgotPasswordButton} />
-        </div>
+            <ButtonField onSumbit={onSumbit} enabled={enableButton} {...forgotPasswordButton} />
+        </Container>
     );
 }
